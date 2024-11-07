@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 
-export default function TabTwoScreen() {
+export default function Explorar() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab Two</Text>

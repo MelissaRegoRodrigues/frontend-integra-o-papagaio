@@ -8,9 +8,8 @@ export default function RootLayout() {
     <>
       <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
 
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>
     </>
   );

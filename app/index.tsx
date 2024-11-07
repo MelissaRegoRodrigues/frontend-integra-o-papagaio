@@ -1,7 +1,8 @@
-import { Button, Pressable, StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Botao from "@/components/Botao";
+import { router } from "expo-router";
 
 export default function TabOneScreen() {
   const [email, setEmail] = useState("");
@@ -30,8 +31,13 @@ export default function TabOneScreen() {
         secureTextEntry={true}
         onChangeText={senhaHandler}
       />
-      <Botao texto="printar email" clicar={() => console.log(email)} />
-      <Botao texto="printar senha" clicar={() => console.log(senha)} />
+
+      <Botao
+        texto="Ir para Home"
+        clicar={() => router.push("/(dashboard)/home")}
+      />
+
+      <Botao texto="Ir para Explorar" clicar={() => console.log(senha)} />
     </View>
   );
 }
