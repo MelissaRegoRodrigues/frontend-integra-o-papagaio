@@ -31,13 +31,15 @@ export default function TabOneScreen() {
         secureTextEntry={true}
         onChangeText={senhaHandler}
       />
-
       <Botao
         texto="Ir para Home"
         clicar={() => router.push("/(dashboard)/home")}
       />
 
-      <Botao texto="Ir para Explorar" clicar={() => console.log(senha)} />
+      <Botao
+        texto="Ir para Explorar"
+        clicar={() => router.push("/(dashboard)/explorar")}
+      />
     </View>
   );
 }
