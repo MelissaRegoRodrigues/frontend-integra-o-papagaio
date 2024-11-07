@@ -21,11 +21,20 @@ export default function PostItem({ post, ...props }: PostItemProps) {
       <Avatar url={usuarioData?.fotoURL} />
       <View style={styles.mainContent}>
         <View style={styles.headerContent}>
-          <View style={styles.headerText}>
-            <StyledText weight="bold">{usuarioData?.nome}</StyledText>
-            <StyledText color="textoCinza">@{usuarioData?.username}</StyledText>
+          <View
+            style={[
+              styles.headerText,
+              { flex: 1, justifyContent: "space-between" },
+            ]}
+          >
+            <View style={styles.headerText}>
+              <StyledText weight="bold">{usuarioData?.nome}</StyledText>
+              <StyledText color="textoCinza">
+                @{usuarioData?.username}
+              </StyledText>
+            </View>
             <StyledText color="textoCinza">
-              - dia {post.dataPublicacao.getDay()}
+              {post.dataPublicacao.toLocaleDateString()}
             </StyledText>
           </View>
         </View>
@@ -40,7 +49,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: "1%",
     marginVertical: "2%",
-    borderWidth: 1,
+    borderBottomWidth: 1,
     alignItems: "center",
   },
   headerContent: {

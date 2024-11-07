@@ -2,6 +2,7 @@ export default {
   texto: {
     textoPreto: "#1A1A1A",
     textoCinza: "#838383",
+    textoBranco: "#FFFFFF",
   },
   background: "#FFFEFA",
   navigationBgColor: "#3C793A",
