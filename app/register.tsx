@@ -6,20 +6,48 @@ import { router } from "expo-router";
 import { Colors } from "@/constants/Colors";
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [senha, SetSenha] = useState("");
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const [senhaConfirma, setSenhaConfirma] = useState("");
+    const [nomeUsuario, setNomeUsuario] = useState("");
+    const [passwordsMatch, setPasswordsMatch] = useState(false);
+
+  const checkPasswordsMatch = (senha: string, senhaConfirma: string) => {
+    setPasswordsMatch(senha === senhaConfirma);
+  };
 
   function emailHandler(novoEmail: string) {
     setEmail(novoEmail);
   }
 
+  function nomeHandler(novoNome: string) {
+    setNomeUsuario(novoNome);
+  }
+
   function senhaHandler(novaSenha: string) {
-    SetSenha(novaSenha);
+    setSenha(novaSenha);
+  }
+
+  function senhaConfirmaHandler(novaSenhaConfirma: string) {
+    setSenhaConfirma(novaSenhaConfirma);
+  }
+
+  function registerHandle() {
+    checkPasswordsMatch(senha, senhaConfirma)
+    router.push("/");
   }
 
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} resizeMode="contain" />
+
+      <Text style={styles.text}>Nome de Usuário</Text>
+      <TextInput
+        placeholder="Nome de usuário"
+        style={styles.input}
+        value={nomeUsuario}
+        onChangeText={nomeHandler}
+      />
 
       <Text style={styles.text}>Email</Text>
       <TextInput
@@ -37,16 +65,25 @@ export default function LoginScreen() {
         onChangeText={senhaHandler}
       />
 
+    <Text style={styles.text}>Confirme a senha</Text>
+      <TextInput
+        placeholder="Senha"
+        style={styles.input}
+        secureTextEntry={true}
+        onChangeText={senhaConfirmaHandler}
+      />
+
+
     <View style={styles.rowContainer}>
-      <TouchableOpacity onPress={() => router.push("/register")}>
-          <Text style={{ color: Colors.green, marginLeft: '16%'}}>Registre-se</Text>
+      <TouchableOpacity onPress={() => router.push("/")}>
+          <Text style={{ color: Colors.green, marginLeft: '16%', marginRight:'12%'}}>Login</Text>
       </TouchableOpacity>
 
       <Botao
         color={Colors.green}
         width={140}
-        texto="Login"
-        clicar={() => router.push("/(dashboard)/home")}
+        texto="Registre-se"
+        clicar={registerHandle}
       />
       </View>
     </View>
