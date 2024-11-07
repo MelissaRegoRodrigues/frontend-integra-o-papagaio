@@ -36,6 +36,7 @@ export default function Header({ route, ...props }: BottomTabHeaderProps) {
           >
             <StyledText
               color="textoBranco"
+              type="header"
               weight={selectedTab === subpagina.key ? "bold" : "normal"}
             >
               {subpagina.title}
@@ -49,7 +50,7 @@ export default function Header({ route, ...props }: BottomTabHeaderProps) {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    backgroundColor: Colors.navigationBgColor,
+    backgroundColor: Colors.green,
     paddingHorizontal: "4%",
     paddingBottom: "2%",
     paddingTop: "10%",
@@ -68,6 +69,6 @@ const styles = StyleSheet.create({
 
   selectedSubtab: {
     borderBottomWidth: 1,
-    borderBlockColor: Colors.tabIconSelected,
+    borderBlockColor: Colors.yellow,
   },
 });

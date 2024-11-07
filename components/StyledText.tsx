@@ -34,4 +34,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   paragrafo: { fontSize: 14 },
+  header: { fontSize: 16 },
 });

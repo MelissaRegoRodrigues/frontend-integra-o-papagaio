@@ -1,26 +1,19 @@
 import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Tabs } from "expo-router";
-import { Pressable } from "react-native";
-import Colors from "@/constants/Colors";
-import Avatar from "@/components/Avatar";
-import Header from "@/components/Header";
+import { Tabs } from "expo-router";
 
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import Colors from "@/constants/Colors";
+
+import Header from "@/components/Header";
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarInactiveTintColor: Colors.tabIconDefault,
+        tabBarInactiveTintColor: Colors.white,
         tabBarActiveTintColor: "#FFDC25",
-        headerStyle: { backgroundColor: Colors.navigationBgColor },
-        tabBarStyle: { backgroundColor: Colors.navigationBgColor },
+        headerStyle: { backgroundColor: Colors.green },
+        tabBarStyle: { backgroundColor: Colors.green },
         header: (props) => <Header {...props} />,
       }}
     >
@@ -28,16 +21,28 @@ export default function TabLayout() {
         name="home"
         options={{
           title: "",
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
-          headerLeftContainerStyle: { paddingHorizontal: "4%" },
-          headerRightContainerStyle: { paddingHorizontal: "4%" },
+          tabBarIcon: ({ focused, color }) => (
+            <FontAwesome
+              style={{ marginBottom: -3 }}
+              color={color}
+              size={26}
+              name="home"
+            />
+          ),
         }}
       />
       <Tabs.Screen
         name="explorar"
         options={{
           title: "",
-          tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
+          tabBarIcon: ({ focused, color }) => (
+            <FontAwesome
+              style={{ marginBottom: -3 }}
+              color={color}
+              size={26}
+              name="search"
+            />
+          ),
         }}
       />
     </Tabs>
