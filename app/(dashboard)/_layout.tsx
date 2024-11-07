@@ -4,6 +4,7 @@ import { Link, Tabs } from "expo-router";
 import { Pressable } from "react-native";
 import Colors from "@/constants/Colors";
 import Avatar from "@/components/Avatar";
+import Header from "@/components/Header";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -20,6 +21,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: "#FFDC25",
         headerStyle: { backgroundColor: Colors.navigationBgColor },
         tabBarStyle: { backgroundColor: Colors.navigationBgColor },
+        header: (props) => <Header {...props} />,
       }}
     >
       <Tabs.Screen
@@ -29,12 +31,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerLeftContainerStyle: { paddingHorizontal: "4%" },
           headerRightContainerStyle: { paddingHorizontal: "4%" },
-          headerLeft: () => <Avatar />,
-          headerRight: () => (
-            <Link href="/" asChild>
-              <FontAwesome name="align-justify" size={24} color="white" />
-            </Link>
-          ),
         }}
       />
       <Tabs.Screen
