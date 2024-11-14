@@ -4,18 +4,54 @@ import { useState } from "react";
 import Botao from "@/components/Botao";
 import { router } from "expo-router";
 import { Colors } from "@/constants/Colors";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const API_URL = 'http://192.168.0.5:8080/api/auth';  // Altere para o endereço do seu backend Spring Boot
+const LOGIN_ENDPOINT = '/login';
+
+interface LoginRequest {
+  email: string;  // Corrigido para "email" ao invés de "username"
+  password: string;
+}
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [senha, SetSenha] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [senha, setSenha] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
-  function emailHandler(novoEmail: string) {
-    setEmail(novoEmail);
-  }
+  const handleLogin = async () => {
+    try {
+      const credentials: LoginRequest = { email: email, password: senha };
 
-  function senhaHandler(novaSenha: string) {
-    SetSenha(novaSenha);
-  }
+      console.log('Enviando requisição de login:', credentials);
+
+      const response = await axios.post(`${API_URL}${LOGIN_ENDPOINT}`, credentials, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.data.tokenDTO.token) {
+        await AsyncStorage.setItem('authToken', response.data.tokenDTO.token);
+        setMessage("Login bem-sucedido!");
+        router.push("/(dashboard)/home");
+      } else {
+        setMessage("Erro ao receber o token.");
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        // Verificando se é um erro do tipo AxiosError
+        console.error("Erro de resposta do servidor:", error.response);
+        console.error("Erro de requisição:", error.request);
+        setMessage("Credenciais inválidas ou erro na requisição.");
+      } else {
+        // Caso o erro não seja do tipo AxiosError
+        console.error("Erro desconhecido:", error);
+        setMessage("Erro desconhecido.");
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -26,7 +62,7 @@ export default function LoginScreen() {
         placeholder="Email"
         style={styles.input}
         value={email}
-        onChangeText={emailHandler}
+        onChangeText={setEmail}
       />
 
       <Text style={styles.text}>Senha</Text>
@@ -34,21 +70,26 @@ export default function LoginScreen() {
         placeholder="Senha"
         style={styles.input}
         secureTextEntry={true}
-        onChangeText={senhaHandler}
+        value={senha}
+        onChangeText={setSenha}
       />
 
-    <View style={styles.rowContainer}>
-      <TouchableOpacity onPress={() => router.push("/register")}>
-          <Text style={{ color: Colors.green, marginLeft: '16%'}}>Registre-se</Text>
-      </TouchableOpacity>
+      <View style={styles.rowContainer}>
+        <TouchableOpacity onPress={() => router.push("/register")}>
+          <Text style={{ color: Colors.green, marginLeft: '16%' }}>Registre-se</Text>
+        </TouchableOpacity>
 
-      <Botao
-        color={Colors.green}
-        width={140}
-        texto="Login"
-        clicar={() => router.push("/(dashboard)/home")}
-      />
+        <Botao
+          color={Colors.green}
+          width={140}
+          texto="Login"
+          clicar={handleLogin}  // Chama a função de login
+        />
       </View>
+
+      {/* Mostra mensagem de erro ou sucesso */}
+      {message ? <Text style={styles.message}>{message}</Text> : null}
+
     </View>
   );
 }
@@ -74,7 +115,7 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     backgroundColor: "white",
     shadowColor: "#171717",
-    shadowOffset: {width: -2, height: 4},
+    shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 6,
@@ -85,16 +126,16 @@ const styles = StyleSheet.create({
     marginTop: "4%",
     fontWeight: "bold",
   },
-  button: {
-    borderWidth: 4,
-    borderRadius: 200,
-    alignItems: "center",
-    padding: "4%",
-  },
   rowContainer: {
     flexDirection: "row",  
     justifyContent: "flex-start", 
     alignItems: "center", 
     marginTop: 10, 
+  },
+  message: {
+    marginTop: 15,
+    textAlign: 'center',
+    color: 'red',
+    fontSize: 16,
   },
 });
