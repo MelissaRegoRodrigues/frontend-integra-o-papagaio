@@ -19,6 +19,8 @@ type Subpaginas = (typeof subPaginas)[number]["key"];
 export default function Header({ route, ...props }: BottomTabHeaderProps) {
   const [selectedTab, setSelectedTab] = useState<Subpaginas>("paraVoce");
 
+  const hideSubtabs = route.name === "notificacoes";
+
   return (
     <View style={styles.headerContainer}>
       <View style={styles.iconsContainers}>
@@ -27,23 +29,26 @@ export default function Header({ route, ...props }: BottomTabHeaderProps) {
           <FontAwesome name="align-justify" size={24} color="white" />
         </Link>
       </View>
-      <View style={styles.subtabsContainer}>
-        {subPaginas.map((subpagina) => (
-          <Pressable
-            key={subpagina.key}
-            onPress={() => setSelectedTab(subpagina.key)}
-            style={[selectedTab === subpagina.key && styles.selectedSubtab]}
-          >
-            <StyledText
-              color="textoBranco"
-              type="header"
-              weight={selectedTab === subpagina.key ? "bold" : "normal"}
+
+      {!hideSubtabs && (
+        <View style={styles.subtabsContainer}>
+          {subPaginas.map((subpagina) => (
+            <Pressable
+              key={subpagina.key}
+              onPress={() => setSelectedTab(subpagina.key)}
+              style={[selectedTab === subpagina.key && styles.selectedSubtab]}
             >
-              {subpagina.title}
-            </StyledText>
-          </Pressable>
-        ))}
-      </View>
+              <StyledText
+                color="textoBranco"
+                type="header"
+                weight={selectedTab === subpagina.key ? "bold" : "normal"}
+              >
+                {subpagina.title}
+              </StyledText>
+            </Pressable>
+          ))}
+        </View>
+      )}
     </View>
   );
 }
@@ -66,7 +71,6 @@ const styles = StyleSheet.create({
     marginTop: "4%",
     gap: 6,
   },
-
   selectedSubtab: {
     borderBottomWidth: 1,
     borderBlockColor: Colors.yellow,

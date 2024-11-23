@@ -9,9 +9,9 @@ export default interface Notificacao{
 export const NOTIFY: Notificacao[] = [
     {
         notificacaoId: "1",
-        titulo: "FELIPE AMORIM É BI!",
+        titulo: "FELIPE AMORIM!",
         nomeDono: "CHOQUEI",
-        conteudo: "Cantor de Música do TikTok Felipe Amorim foi visto noite passada em clima romântico com seu parceiro de palcco DJ Kaleb",
+        conteudo: "Cantor de Música do TikTok Felipe Amorim",
         dataPublicacao: new Date(),
     },
     {
