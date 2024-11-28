@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
+// @ts-expect-error
 import logo from "../assets/images/logoLogin.png";
 import { useState } from "react";
 import Botao from "@/components/Botao";
@@ -52,10 +53,10 @@ export default function LoginScreen() {
         </TouchableOpacity>
 
         <Botao
-          color={Colors.green}
+          color="green"
           width={140}
           texto="Login"
-          clicar={() => router.push("/(dashboard)/home")}
+          clicar={() => router.push("/(dashboard)/main/home")}
         />
       </View>
     </View>

@@ -1,21 +1,34 @@
 import { Pressable, PressableProps, StyleSheet, View } from "react-native";
 import StyledText from "../StyledText";
-import { Feather } from "@expo/vector-icons";
-import { PropsWithoutRef } from "react";
+import { PropsWithoutRef, useCallback } from "react";
 import Post from "@/models/Post";
 import { getUsuarioById } from "@/api/usuarioService";
 import Avatar from "../Avatar";
+import { router } from "expo-router";
+import useUsuario from "@/hooks/useUsuarios";
 
 type PostItemProps = {
   post: Post;
 } & PropsWithoutRef<PressableProps>;
 
 export default function PostItem({ post, ...props }: PostItemProps) {
-  const usuarioData = getUsuarioById(post.donoId);
+  const fetchUsuario = useCallback(
+    () => getUsuarioById(post.donoId),
+    [post.donoId]
+  );
+  const { data: usuarioData, isLoading } = useUsuario(fetchUsuario);
+  const dataFormatada = new Date(post.dataPublicacao).toLocaleDateString();
+
+  function toPostScreen() {
+    const url = `/posts/${post.id}`;
+    // @ts-expect-error
+    router.navigate(url);
+  }
 
   return (
     <Pressable
       style={({ pressed }) => [styles.rootContainer, pressed && styles.pressed]}
+      onPress={toPostScreen}
       {...props}
     >
       <Avatar url={usuarioData?.fotoURL} />
@@ -29,13 +42,8 @@ export default function PostItem({ post, ...props }: PostItemProps) {
           >
             <View style={styles.headerText}>
               <StyledText weight="bold">{usuarioData?.nome}</StyledText>
-              <StyledText color="textoCinza">
-                @{usuarioData?.username}
-              </StyledText>
             </View>
-            <StyledText color="textoCinza">
-              {post.dataPublicacao.toLocaleDateString()}
-            </StyledText>
+            <StyledText color="textoCinza">{dataFormatada}</StyledText>
           </View>
         </View>
         <StyledText>{post.conteudo}</StyledText>

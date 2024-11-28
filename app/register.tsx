@@ -6,11 +6,13 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
+// @ts-expect-error
 import logo from "../assets/images/logoLogin.png";
 import { useState } from "react";
 import Botao from "@/components/Botao";
 import { router } from "expo-router";
 import Colors from "@/constants/Colors";
+import Input from "@/components/geral/Input";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -51,32 +53,26 @@ export default function LoginScreen() {
       <Text style={styles.text}>Nome de Usuário</Text>
       <TextInput
         placeholder="Nome de usuário"
-        style={styles.input}
         value={nomeUsuario}
         onChangeText={nomeHandler}
       />
 
       <Text style={styles.text}>Email</Text>
-      <TextInput
-        placeholder="Email"
-        style={styles.input}
-        value={email}
-        onChangeText={emailHandler}
-      />
+      <Input placeholder="Email" value={email} onChangeText={emailHandler} />
 
       <Text style={styles.text}>Senha</Text>
-      <TextInput
+      <Input
         placeholder="Senha"
-        style={styles.input}
         secureTextEntry={true}
+        value={senha}
         onChangeText={senhaHandler}
       />
 
       <Text style={styles.text}>Confirme a senha</Text>
-      <TextInput
+      <Input
         placeholder="Senha"
-        style={styles.input}
         secureTextEntry={true}
+        value={senhaConfirma}
         onChangeText={senhaConfirmaHandler}
       />
 
@@ -94,7 +90,7 @@ export default function LoginScreen() {
         </TouchableOpacity>
 
         <Botao
-          color={Colors.green}
+          color="green"
           width={140}
           texto="Registre-se"
           clicar={registerHandle}
@@ -115,20 +111,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "20%",
     alignSelf: "center",
-  },
-  input: {
-    borderWidth: 1,
-    padding: "2%",
-    margin: "4%",
-    height: 50,
-    borderRadius: 15,
-    borderColor: "transparent",
-    backgroundColor: "white",
-    shadowColor: "#171717",
-    shadowOffset: { width: -2, height: 4 },
-    shadowOpacity: 0.5,
-    shadowRadius: 3,
-    elevation: 6,
   },
   text: {
     color: "black",

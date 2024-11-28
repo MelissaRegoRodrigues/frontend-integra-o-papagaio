@@ -1,16 +1,23 @@
+import Colors from "@/constants/Colors";
 import { Pressable, StyleSheet, Text } from "react-native";
 
 type BotaoProps = {
   texto: string;
   clicar: () => void;
   width: number;
-  color: string;
+  color: Exclude<keyof typeof Colors, "texto">;
 };
 
-export default function Botao({ texto, clicar, width, color, ...props }: BotaoProps) {
+export default function Botao({
+  texto,
+  clicar,
+  width,
+  color,
+  ...props
+}: BotaoProps) {
   return (
     <Pressable
-      style={[styles.button, { backgroundColor: color, width: width }]}
+      style={[styles.button, { backgroundColor: Colors[color], width: width }]}
       onPress={clicar}
       {...props}
     >
@@ -26,11 +33,11 @@ const styles = StyleSheet.create({
     padding: "4%",
     margin: "4%",
     marginLeft: "8%",
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
   },
   text: {
     color: "white",
-    fontSize: 16, 
-    fontWeight: "bold", 
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
