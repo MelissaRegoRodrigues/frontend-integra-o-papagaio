@@ -1,3 +1,5 @@
+import { StyleSheet } from "react-native";
+
 export default {
   texto: {
     textoPreto: "#1A1A1A",

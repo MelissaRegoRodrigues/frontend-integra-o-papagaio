@@ -9,14 +9,17 @@ type AvatarProps = {
 
 export default function Avatar({
   url,
-  size = 52,
+  size = 56,
   style,
   ...props
 }: AvatarProps) {
   return (
     <View style={[styles.container, style]} {...props}>
       {url ? (
-        <Image source={{ uri: url }} style={styles.avatar} />
+        <Image
+          source={{ uri: url }}
+          style={[styles.avatar, { minWidth: size }]}
+        />
       ) : (
         <Feather name="user" size={size} />
       )}
@@ -33,7 +36,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   avatar: {
-    minWidth: 56,
     aspectRatio: 1,
     borderRadius: 50,
   },

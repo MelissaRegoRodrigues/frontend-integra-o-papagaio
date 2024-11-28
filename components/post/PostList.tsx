@@ -1,18 +1,46 @@
-import Post, { DUMMY_POSTS } from "@/models/Post";
-import { FlatList, View } from "react-native";
+import React from "react";
+import { FlatList, RefreshControl, View } from "react-native";
+import Post from "@/models/Post";
 import PostItem from "./PostItem";
+import StyledText from "../StyledText";
 
-export default function PostList() {
+type PostListProps = {
+  posts: Post[];
+  onRefresh: () => void;
+  isRefreshing: boolean;
+};
+
+export default function PostList({
+  posts,
+  onRefresh,
+  isRefreshing,
+}: PostListProps) {
   function renderHandler(post: Post) {
     return <PostItem post={post} />;
   }
 
   return (
     <FlatList
-      data={DUMMY_POSTS}
+      data={posts}
       renderItem={({ item }) => renderHandler(item)}
       keyExtractor={(post) => post.id}
       contentContainerStyle={{ padding: "2%" }}
+      refreshControl={
+        <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+      }
+      ListEmptyComponent={
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <StyledText>
+            Nenhum Post encontrado, seja o primeiro a postar algo!
+          </StyledText>
+        </View>
+      }
     />
   );
 }

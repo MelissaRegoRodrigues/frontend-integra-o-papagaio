@@ -1,18 +1,26 @@
-import { Image, Text, StyleSheet, TextInput, View, TouchableOpacity } from "react-native";
-import logo from '../assets/images/logoLogin.png';
+import {
+  Image,
+  Text,
+  StyleSheet,
+  TextInput,
+  View,
+  TouchableOpacity,
+} from "react-native";
+// @ts-expect-error
+import logo from "../assets/images/logoLogin.png";
 import { useState } from "react";
 import Botao from "@/components/Botao";
 import { router } from "expo-router";
-import Colors  from "@/constants/Colors";
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Colors from "@/constants/Colors";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 
-const API_URL = ' https://394e-200-133-1-75.ngrok-free.app/api/auth';  // Altere para o endereço do seu backend Spring Boot
-const LOGIN_ENDPOINT = '/login';
+const API_URL = " https://394e-200-133-1-75.ngrok-free.app/api/auth"; // Altere para o endereço do seu backend Spring Boot
+const LOGIN_ENDPOINT = "/login";
 
 interface LoginRequest {
-  email: string;  // Corrigido para "email" ao invés de "username"
+  email: string; // Corrigido para "email" ao invés de "username"
   password: string;
 }
 
@@ -25,18 +33,22 @@ export default function LoginScreen() {
     try {
       const credentials: LoginRequest = { email: email, password: senha };
 
-      console.log('Enviando requisição de login:', credentials);
+      console.log("Enviando requisição de login:", credentials);
 
-      const response = await axios.post(`${API_URL}${LOGIN_ENDPOINT}`, credentials, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.post(
+        `${API_URL}${LOGIN_ENDPOINT}`,
+        credentials,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.data.tokenDTO.token) {
-        await AsyncStorage.setItem('authToken', response.data.tokenDTO.token);
+        await AsyncStorage.setItem("authToken", response.data.tokenDTO.token);
         setMessage("Login bem-sucedido!");
-        router.push("/(dashboard)/home");
+        router.push("/(dashboard)/main/home");
       } else {
         setMessage("Erro ao receber o token.");
       }
@@ -77,20 +89,21 @@ export default function LoginScreen() {
 
       <View style={styles.rowContainer}>
         <TouchableOpacity onPress={() => router.push("/register")}>
-          <Text style={{ color: Colors.green, marginLeft: '16%' }}>Registre-se</Text>
+          <Text style={{ color: Colors.green, marginLeft: "16%" }}>
+            Registre-se
+          </Text>
         </TouchableOpacity>
 
         <Botao
-          color={Colors.green}
+          color="green"
           width={140}
           texto="Login"
-          clicar={handleLogin}  // Chama a função de login
+          clicar={() => router.push("/(dashboard)/main/home")}
         />
       </View>
 
       {/* Mostra mensagem de erro ou sucesso */}
       {message ? <Text style={styles.message}>{message}</Text> : null}
-
     </View>
   );
 }
@@ -112,7 +125,7 @@ const styles = StyleSheet.create({
     padding: "2%",
     margin: "4%",
     height: 50,
-    borderRadius: 15, 
+    borderRadius: 15,
     borderColor: "transparent",
     backgroundColor: "white",
     shadowColor: "#171717",
@@ -128,15 +141,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   rowContainer: {
-    flexDirection: "row",  
-    justifyContent: "flex-start", 
-    alignItems: "center", 
-    marginTop: 10, 
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginTop: 10,
   },
   message: {
     marginTop: 15,
-    textAlign: 'center',
-    color: 'red',
+    textAlign: "center",
+    color: "red",
     fontSize: 16,
   },
 });
