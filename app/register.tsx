@@ -105,14 +105,14 @@ export default function RegisterScreen() {
       />
 
       <Text style={styles.text}>Email</Text>
-      <Input placeholder="Email" value={email} onChangeText={emailHandler} />
+      <Input placeholder="Email" value={email} onChangeText={setEmail} />
 
       <Text style={styles.text}>Senha</Text>
       <Input
         placeholder="Senha"
         secureTextEntry={true}
         value={senha}
-        onChangeText={senhaHandler}
+        onChangeText={setSenha}
       />
 
       <Text style={styles.text}>Confirme a senha</Text>
@@ -120,7 +120,7 @@ export default function RegisterScreen() {
         placeholder="Senha"
         secureTextEntry={true}
         value={senhaConfirma}
-        onChangeText={senhaConfirmaHandler}
+        onChangeText={setSenhaConfirma}
       />
 
       <View style={styles.rowContainer}>
