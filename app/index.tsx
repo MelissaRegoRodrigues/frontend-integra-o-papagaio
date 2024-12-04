@@ -69,7 +69,6 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} resizeMode="contain" />
-
       <Text style={styles.text}>Email</Text>
       <TextInput
         placeholder="Email"
