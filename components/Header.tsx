@@ -26,7 +26,6 @@ export default function Header({ router, ...props }: BottomTabHeaderProps) {
     setSelectedTab(tab);
     setPagina(tab);
   };
-
   function deslogarHandler() {
     Alert.alert(
       "Tem certeza?",

@@ -16,11 +16,11 @@ type PostItemProps = {
 
 export default function PostItem({ post, ...props }: PostItemProps) {
   const { usuario, refresh } = useAuth();
-
   const fetchUsuario = useCallback(
     () => usuarioService.getUsuarioById(post.donoId),
     [post.donoId]
   );
+
   const { data: usuarioData } = useUsuario(fetchUsuario);
   const dataFormatada = new Date(post.dataPublicacao).toLocaleDateString();
   const [isSeguindo, setIsSeguindo] = useState<boolean>(
@@ -32,7 +32,7 @@ export default function PostItem({ post, ...props }: PostItemProps) {
     router.navigate(url);
   }
 
-  console.log(post.donoId);
+  console.log(usuarioData);
 
   async function seguirHandler() {
     if (!usuario) return;

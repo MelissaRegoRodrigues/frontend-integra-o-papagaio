@@ -77,7 +77,7 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#FFFEFA",
+    backgroundColor: "#a7a189",
     padding: "10%",
     flex: 1,
     justifyContent: "center",
