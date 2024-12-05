@@ -1,28 +1,59 @@
+import React, { useState } from "react";
 import { Pressable, PressableProps, StyleSheet, View } from "react-native";
 import StyledText from "../StyledText";
 import { PropsWithoutRef, useCallback } from "react";
 import Post from "@/models/Post";
-import { getUsuarioById } from "@/api/usuarioService";
+
 import Avatar from "../Avatar";
 import { router } from "expo-router";
 import useUsuario from "@/hooks/useUsuarios";
+import { usuarioService } from "@/api/usuarioService";
+import useAuth from "@/hooks/useAuth";
 
 type PostItemProps = {
   post: Post;
 } & PropsWithoutRef<PressableProps>;
 
 export default function PostItem({ post, ...props }: PostItemProps) {
+  const { usuario, refresh } = useAuth();
+
   const fetchUsuario = useCallback(
-    () => getUsuarioById(post.donoId),
+    () => usuarioService.getUsuarioById(post.donoId),
     [post.donoId]
   );
-  const { data: usuarioData, isLoading } = useUsuario(fetchUsuario);
+  const { data: usuarioData } = useUsuario(fetchUsuario);
   const dataFormatada = new Date(post.dataPublicacao).toLocaleDateString();
-
+  const [isSeguindo, setIsSeguindo] = useState<boolean>(
+    !!usuarioData?.seguidores?.find((user) => user.id === usuario?.id) || false
+  );
   function toPostScreen() {
     const url = `/posts/${post.id}`;
     // @ts-expect-error
     router.navigate(url);
+  }
+
+  console.log(post.donoId);
+
+  async function seguirHandler() {
+    if (!usuario) return;
+    const usuarioAtualizado = await usuarioService.follow(
+      usuario!.id,
+      usuarioData!.id
+    );
+    setIsSeguindo(true);
+
+    refresh(usuarioAtualizado);
+  }
+
+  async function pararSeguirHandler() {
+    if (!usuario) return;
+
+    const usuarioAtualizado = await usuarioService.unfollow(
+      usuario!.id,
+      usuarioData!.id
+    );
+    setIsSeguindo(false);
+    refresh(usuarioAtualizado);
   }
 
   return (
@@ -43,7 +74,24 @@ export default function PostItem({ post, ...props }: PostItemProps) {
             <View style={styles.headerText}>
               <StyledText weight="bold">{usuarioData?.nome}</StyledText>
             </View>
-            <StyledText color="textoCinza">{dataFormatada}</StyledText>
+            <View style={{ flexDirection: "row", gap: 16 }}>
+              <StyledText color="textoCinza">{dataFormatada}</StyledText>
+              {isSeguindo ? (
+                <Pressable
+                  style={{ borderWidth: 1, padding: "2%", borderRadius: 8 }}
+                  onPress={pararSeguirHandler}
+                >
+                  <StyledText>Parar de Seguir</StyledText>
+                </Pressable>
+              ) : (
+                <Pressable
+                  style={{ borderWidth: 1, padding: "2%", borderRadius: 8 }}
+                  onPress={seguirHandler}
+                >
+                  <StyledText>Seguir</StyledText>
+                </Pressable>
+              )}
+            </View>
           </View>
         </View>
         <StyledText>{post.conteudo}</StyledText>

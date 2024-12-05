@@ -1,6 +1,6 @@
-import Post from "@/models/Post";
+import Post, { PostCreation } from "@/models/Post";
 
-const URL = "https://dcf6-200-133-1-75.ngrok-free.app/api/posts";
+const URL = "https://930c-200-133-1-75.ngrok-free.app/api/posts";
 
 export async function getAllPosts() {
   const response = await fetch(URL);
@@ -21,5 +21,37 @@ export async function getPostById(postId: string) {
     throw new Error("Algo deu errado " + { cause: response.text });
 
   const data = await response.json();
+  return data as Post;
+}
+
+export async function getMeusPosts(usuarioId: string) {
+  console.log("meus posts", URL + `/seguidor/${usuarioId}`);
+
+  const response = await fetch(URL + `/seguidor/${usuarioId}`);
+
+  if (!response.ok)
+    throw new Error("Algo deu errado " + { cause: response.text });
+
+  const data = await response.json();
+  console.log(data);
+
+  return data as Post[];
+}
+
+export async function criarPost(novoPost: PostCreation) {
+  const response = await fetch(URL, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(novoPost),
+  });
+
+  if (!response.ok)
+    throw new Error("Algo deu errado " + { cause: response.text });
+
+  const data = await response.json();
+  console.log(data);
+
   return data as Post;
 }

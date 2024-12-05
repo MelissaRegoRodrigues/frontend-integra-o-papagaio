@@ -6,6 +6,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 // @ts-expect-error
 import logo from "../assets/images/logoLogin.png";
@@ -13,85 +14,32 @@ import { useState } from "react";
 import Botao from "@/components/Botao";
 import { router } from "expo-router";
 import Colors from "@/constants/Colors";
-import Input from "@/components/geral/Input";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
-
-const API_URL = " https://394e-200-133-1-75.ngrok-free.app/api/auth";
-const REGISTER_ENDPOINT = "/register";
-
-interface RegisterRequest {
-  username: string;
-  email: string;
-  password: string;
-}
+import useAuth from "@/hooks/useAuth";
 
 export default function RegisterScreen() {
-  const [nomeUsuario, setNomeUsuario] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [senha, setSenha] = useState<string>("");
-  const [senhaConfirma, setSenhaConfirma] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
-  const [passwordsMatch, setPasswordsMatch] = useState<boolean>(true);
+  const { registrar } = useAuth();
+  const [nome, setnome] = useState<string>("zap");
+  const [email, setEmail] = useState<string>("zap@gmail.com");
+  const [senha, setSenha] = useState<string>("zapzap");
+  const [senhaConfirma, setSenhaConfirma] = useState<string>("zapzap");
 
-  // Função para verificar se as senhas coincidem
-  const checkPasswordsMatch = () => {
-    setPasswordsMatch(senha === senhaConfirma);
-  };
-
-  // Função de registro
   const handleRegister = async () => {
-    if (!passwordsMatch) {
-      alert("As senhas não coincidem!");
-      return;
-    }
+    console.log(senha, email, nome);
 
-    if (!nomeUsuario || !email || !senha || !senhaConfirma) {
-      alert("Por favor, preencha todos os campos.");
-      return;
-    }
-
-    try {
-      const newUser: RegisterRequest = {
-        username: nomeUsuario,
-        email,
-        password: senha,
-      };
-      const response = await axios.post(
-        `${API_URL}${REGISTER_ENDPOINT}`,
-        newUser,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // Verifique o que está sendo retornado
-      console.log("Resposta da API:", response.data);
-
-      // Verifique se 'accessToken' existe e está sendo retornado corretamente
-      if (response.data.accessToken) {
-        await AsyncStorage.setItem("authToken", response.data.accessToken);
-        setMessage("Registro bem-sucedido!");
-        router.push("/"); // Redireciona para a tela inicial (ou login)
-      } else {
-        setMessage("Erro ao registrar usuário.");
-      }
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        // Verificando se é um erro do tipo AxiosError
-        console.error("Erro de resposta do servidor:", error.response);
-        console.error("Erro de requisição:", error.request);
-        setMessage("Credenciais inválidas ou erro na requisição.");
-      } else {
-        // Caso o erro não seja do tipo AxiosError
-        console.error("Erro desconhecido:", error);
-        setMessage("Erro desconhecido.");
-      }
-    }
+    if (!senha || !email || !nome) return;
+    registrar({ nome, email, password: senha, username: nome });
+    resetInputs();
+    Alert.alert("Usuário registrado com sucesso");
+    router.back();
   };
+
+  function resetInputs() {
+    setnome("");
+    setEmail("");
+    setSenha("");
+    setSenhaConfirma("");
+  }
 
   return (
     <View style={styles.container}>
@@ -100,27 +48,39 @@ export default function RegisterScreen() {
       <Text style={styles.text}>Nome de Usuário</Text>
       <TextInput
         placeholder="Nome de usuário"
-        value={nomeUsuario}
-        onChangeText={setNomeUsuario}
+        value={nome}
+        onChangeText={setnome}
+        autoCapitalize="none"
+        style={styles.input}
       />
 
       <Text style={styles.text}>Email</Text>
-      <Input placeholder="Email" value={email} onChangeText={setEmail} />
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        style={styles.input}
+        autoCapitalize="none"
+      />
 
       <Text style={styles.text}>Senha</Text>
-      <Input
+      <TextInput
         placeholder="Senha"
         secureTextEntry={true}
         value={senha}
         onChangeText={setSenha}
+        style={styles.input}
+        autoCapitalize="none"
       />
 
       <Text style={styles.text}>Confirme a senha</Text>
-      <Input
+      <TextInput
         placeholder="Senha"
         secureTextEntry={true}
         value={senhaConfirma}
         onChangeText={setSenhaConfirma}
+        style={styles.input}
+        autoCapitalize="none"
       />
 
       <View style={styles.rowContainer}>
@@ -162,5 +122,19 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     marginTop: 10,
+  },
+  input: {
+    borderWidth: 1,
+    padding: "2%",
+    margin: "4%",
+    height: 50,
+    borderRadius: 15,
+    borderColor: "transparent",
+    backgroundColor: "white",
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 6,
   },
 });

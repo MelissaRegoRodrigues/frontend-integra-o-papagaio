@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 
 import Colors from "@/constants/Colors";
 
 import Header from "@/components/Header";
+import useAuth from "@/hooks/useAuth";
 
 export default function TabLayout() {
+  const { usuario } = useAuth();
+  useEffect(() => {
+    if (!usuario) {
+      router.push("/");
+    }
+  }, [usuario]);
   return (
     <Tabs
       screenOptions={{
@@ -62,17 +69,17 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-       name="notificacoes"
-       options={{
-         title: "",
-         tabBarIcon: ({ focused, color }) => (
-           <FontAwesome 
-             style={{ marginBottom: -3 }}
-             color={color}
-             size={23}
-             name="bell"
-           />
-         ),
+        name="notificacoes"
+        options={{
+          title: "",
+          tabBarIcon: ({ focused, color }) => (
+            <FontAwesome
+              style={{ marginBottom: -3 }}
+              color={color}
+              size={23}
+              name="bell"
+            />
+          ),
         }}
       />
     </Tabs>

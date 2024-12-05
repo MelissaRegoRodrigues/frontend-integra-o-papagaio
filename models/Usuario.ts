@@ -4,6 +4,13 @@ export default interface Usuario {
   email: string;
   fotoURL: string;
   username: string;
-  seguindo: string[];
-  seguidores: string[];
+  seguindo: Usuario[];
+  seguidores: Usuario[];
 }
+
+export type UsuarioCreation = {
+  nome: string;
+  email: string;
+  password: string;
+  username: string;
+};

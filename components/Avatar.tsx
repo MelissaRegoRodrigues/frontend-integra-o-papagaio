@@ -1,3 +1,4 @@
+import React from "react";
 import { Feather } from "@expo/vector-icons";
 import { PropsWithoutRef } from "react";
 import { Image, StyleSheet, View, ViewProps } from "react-native";

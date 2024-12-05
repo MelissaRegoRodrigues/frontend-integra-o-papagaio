@@ -1,58 +1,43 @@
 import Usuario from "@/models/Usuario";
 
-const URL = "https://dcf6-200-133-1-75.ngrok-free.app/api/usuarios";
+const USUARIOS_URL = "https://930c-200-133-1-75.ngrok-free.app/api/usuarios";
 
-export async function register(usuario: Usuario) {
-  const response = await fetch(URL + "/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(usuario),
-  });
+async function follow(seguidorId: string, alvoId: string) {
+  const response = await fetch(
+    USUARIOS_URL + `/follow/${seguidorId}/${alvoId}`,
+    {
+      method: "POST",
+    }
+  );
 
   if (!response.ok) {
-    throw new Error("Erro ao registrar usuário");
+    throw new Error("Erro ao seguir usuário");
+  }
+
+  const data = await response.json();
+  console.log(data);
+
+  return data as Usuario;
+}
+
+async function unfollow(seguidorId: string, seguidoId: string) {
+  const response = await fetch(
+    USUARIOS_URL + `/unfollow/${seguidorId}/${seguidoId}`,
+    {
+      method: "POST",
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Erro ao deixar de seguir usuário");
   }
 
   const data = await response.json();
   return data as Usuario;
 }
 
-export async function follow(
-  seguidorId: string,
-  seguidoId: string
-): Promise<string> {
-  const response = await fetch(URL + `/follow/${seguidorId}/${seguidoId}`, {
-    method: "POST",
-  });
-
-  if (!response.ok) {
-    throw new Error("Erro ao seguir usuário");
-  }
-
-  const data = await response.text();
-  return data;
-}
-
-export async function unfollow(
-  seguidorId: string,
-  seguidoId: string
-): Promise<string> {
-  const response = await fetch(URL + `/unfollow/${seguidorId}/${seguidoId}`, {
-    method: "POST",
-  });
-
-  if (!response.ok) {
-    throw new Error("Erro ao deixar de seguir usuário");
-  }
-
-  const data = await response.text();
-  return data;
-}
-
-export async function getFollowers(usuarioId: string): Promise<Usuario[]> {
-  const response = await fetch(URL + `/followers/${usuarioId}`);
+async function getFollowers(usuarioId: string): Promise<Usuario[]> {
+  const response = await fetch(USUARIOS_URL + `/followers/${usuarioId}`);
 
   if (!response.ok) {
     throw new Error("Erro ao obter seguidores");
@@ -62,8 +47,8 @@ export async function getFollowers(usuarioId: string): Promise<Usuario[]> {
   return data as Usuario[];
 }
 
-export async function getFollowing(usuarioId: string): Promise<Usuario[]> {
-  const response = await fetch(URL + `/following/${usuarioId}`);
+async function getFollowing(usuarioId: string): Promise<Usuario[]> {
+  const response = await fetch(USUARIOS_URL + `/following/${usuarioId}`);
 
   if (!response.ok) {
     throw new Error("Erro ao obter seguidos");
@@ -73,8 +58,8 @@ export async function getFollowing(usuarioId: string): Promise<Usuario[]> {
   return data as Usuario[];
 }
 
-export async function getAllUsuarios(): Promise<Usuario[]> {
-  const response = await fetch(URL);
+async function getAllUsuarios(): Promise<Usuario[]> {
+  const response = await fetch(USUARIOS_URL);
 
   if (!response.ok) {
     throw new Error("Erro ao obter usuários");
@@ -84,12 +69,22 @@ export async function getAllUsuarios(): Promise<Usuario[]> {
   return data as Usuario[];
 }
 
-export async function getUsuarioById(usuarioId: string) {
-  const response = await fetch(URL + `/${usuarioId}`);
+async function getUsuarioById(usuarioId: string): Promise<Usuario> {
+  const response = await fetch(USUARIOS_URL + `/${usuarioId}`);
 
-  if (!response.ok)
-    throw new Error("Algo deu errado " + { cause: response.text });
+  if (!response.ok) {
+    throw new Error("Erro ao obter usuário por ID");
+  }
 
   const data = await response.json();
   return data as Usuario;
 }
+
+export const usuarioService = {
+  follow,
+  unfollow,
+  getFollowers,
+  getFollowing,
+  getAllUsuarios,
+  getUsuarioById,
+};

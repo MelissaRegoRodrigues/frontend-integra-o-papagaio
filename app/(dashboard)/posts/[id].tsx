@@ -1,3 +1,4 @@
+import React from "react";
 import { getPostById } from "@/api/postService";
 import { getComentariosByPostId } from "@/api/comentarioService";
 import Avatar from "@/components/Avatar";
@@ -5,10 +6,10 @@ import ComentarioList from "@/components/comentario/ComentarioList";
 import StyledText from "@/components/StyledText";
 import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, View } from "react-native";
-import { getUsuarioById } from "@/api/usuarioService";
 import usePosts from "@/hooks/usePosts";
 import useUsuario from "@/hooks/useUsuarios";
 import { useCallback } from "react";
+import { usuarioService } from "@/api/usuarioService";
 
 export default function PostScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -16,7 +17,10 @@ export default function PostScreen() {
   const { data: post, error, isLoading } = usePosts(fetchPost);
 
   const fetchUsuario = useCallback(
-    () => (post?.donoId ? getUsuarioById(post.donoId) : Promise.resolve(null)),
+    () =>
+      post?.donoId
+        ? usuarioService.getUsuarioById(post.donoId)
+        : Promise.resolve(null),
     [post?.donoId]
   );
 

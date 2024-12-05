@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 import StyledText from "../StyledText";
 import { Feather } from "@expo/vector-icons";
 import Comentario from "@/models/Comentario";
-import { getUsuarioById } from "@/api/usuarioService";
+import { getUsuarioById } from "@/api/authService";
 
 import Avatar from "../Avatar";
 

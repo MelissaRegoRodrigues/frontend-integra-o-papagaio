@@ -10,20 +10,20 @@ export default function usePosts<T>(
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
+    setError(null);
     try {
       const result = await fetchFunction();
       setData(result);
-      setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro desconhecido");
     } finally {
       setIsLoading(false);
     }
-  }, [fetchFunction, ...dependencies]);
+  }, [fetchFunction]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, ...dependencies]);
 
   return { data, error, isLoading, refresh: fetchData };
 }

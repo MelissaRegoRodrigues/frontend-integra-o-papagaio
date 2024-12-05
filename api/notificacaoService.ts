@@ -1,10 +1,10 @@
-import Notificacao from "@/app/(dashboard)/notificacoes";
+import Notificacao from "@/app/(dashboard)/main/notificacoes";
 import { NOTIFY } from "@/models/Notificacao";
 
 export function getAllNotificacoes() {
-    return NOTIFY;
+  return NOTIFY;
 }
 
-export function getNotificacaoById (id: string) {
-    return NOTIFY.find((Notificacao) => Notificacao.notificacaoId == id);
+export function getNotificacaoById(id: string) {
+  return NOTIFY.find((Notificacao) => Notificacao.notificacaoId == id);
 }

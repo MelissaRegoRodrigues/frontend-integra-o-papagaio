@@ -8,62 +8,34 @@ import {
 } from "react-native";
 // @ts-expect-error
 import logo from "../assets/images/logoLogin.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Botao from "@/components/Botao";
 import { router } from "expo-router";
 import Colors from "@/constants/Colors";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
-
-const API_URL = " https://394e-200-133-1-75.ngrok-free.app/api/auth"; // Altere para o endereço do seu backend Spring Boot
-const LOGIN_ENDPOINT = "/login";
-
-interface LoginRequest {
-  email: string; // Corrigido para "email" ao invés de "username"
-  password: string;
-}
+import { Credenciais } from "@/store/AuthContext";
+import useAuth from "@/hooks/useAuth";
 
 export default function LoginScreen() {
+  const { logar, usuario } = useAuth();
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
   const [message, setMessage] = useState<string>("");
 
-  const handleLogin = async () => {
-    try {
-      const credentials: LoginRequest = { email: email, password: senha };
-
-      console.log("Enviando requisição de login:", credentials);
-
-      const response = await axios.post(
-        `${API_URL}${LOGIN_ENDPOINT}`,
-        credentials,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.data.tokenDTO.token) {
-        await AsyncStorage.setItem("authToken", response.data.tokenDTO.token);
-        setMessage("Login bem-sucedido!");
-        router.push("/(dashboard)/main/home");
-      } else {
-        setMessage("Erro ao receber o token.");
-      }
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        // Verificando se é um erro do tipo AxiosError
-        console.error("Erro de resposta do servidor:", error.response);
-        console.error("Erro de requisição:", error.request);
-        setMessage("Credenciais inválidas ou erro na requisição.");
-      } else {
-        // Caso o erro não seja do tipo AxiosError
-        console.error("Erro desconhecido:", error);
-        setMessage("Erro desconhecido.");
-      }
+  useEffect(() => {
+    if (usuario) {
+      router.push("/(dashboard)/main/home");
     }
+  }, [usuario]);
+
+  const handleLogin = async () => {
+    if (!email || !senha) return;
+
+    const credentials: Credenciais = { email, password: senha };
+
+    console.log("Enviando requisição de login:", credentials);
+
+    logar({ email, password: senha });
   };
 
   return (
@@ -75,6 +47,7 @@ export default function LoginScreen() {
         style={styles.input}
         value={email}
         onChangeText={setEmail}
+        autoCapitalize="none"
       />
 
       <Text style={styles.text}>Senha</Text>
@@ -84,6 +57,7 @@ export default function LoginScreen() {
         secureTextEntry={true}
         value={senha}
         onChangeText={setSenha}
+        autoCapitalize="none"
       />
 
       <View style={styles.rowContainer}>
@@ -93,15 +67,9 @@ export default function LoginScreen() {
           </Text>
         </TouchableOpacity>
 
-        <Botao
-          color="green"
-          width={140}
-          texto="Login"
-          clicar={() => router.push("/(dashboard)/main/home")}
-        />
+        <Botao color="green" width={140} texto="Login" clicar={handleLogin} />
       </View>
 
-      {/* Mostra mensagem de erro ou sucesso */}
       {message ? <Text style={styles.message}>{message}</Text> : null}
     </View>
   );

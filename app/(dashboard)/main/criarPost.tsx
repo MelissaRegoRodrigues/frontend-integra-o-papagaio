@@ -1,10 +1,13 @@
+import React from "react";
 import Botao from "@/components/Botao";
 import Input from "@/components/geral/Input";
 import StyledText from "@/components/StyledText";
 import { PostCreation } from "@/models/Post";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { StyleSheet, View, Alert, ScrollView } from "react-native";
+import { criarPost } from "@/api/postService";
+import useAuth from "@/hooks/useAuth";
 
 const defaultValue: PostCreation = {
   donoId: "placeholder",
@@ -14,6 +17,7 @@ const defaultValue: PostCreation = {
 };
 
 export default function CreatePostScreen() {
+  const { usuario } = useAuth();
   const [form, setForm] = useState<PostCreation>(defaultValue);
 
   function handleInputChange<T extends keyof PostCreation>(
@@ -32,7 +36,9 @@ export default function CreatePostScreen() {
       return;
     }
 
-    console.log("Post criado com sucesso:", form);
+    criarPost({ ...form, donoId: usuario!.id });
+    setForm(defaultValue);
+    router.back();
     Alert.alert("Sucesso", "Post criado com sucesso!");
   }
 
