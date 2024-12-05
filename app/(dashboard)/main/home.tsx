@@ -5,16 +5,22 @@ import { getAllPosts, getMeusPosts } from "@/api/postService";
 import { View } from "react-native";
 import useAuth from "@/hooks/useAuth";
 
+function getFetchFunction(pagina: string, usuarioId?: string) {
+  switch (pagina) {
+    case "paraVoce":
+      return getMeusPosts.bind(null, usuarioId!);
+    default:
+      return getAllPosts;
+  }
+}
+
 export default function Home() {
   const { usuario, pagina } = useAuth();
-  const fetchFunction = useMemo(() => {
-    switch (pagina) {
-      case "praVoce":
-        return getMeusPosts.bind(null, usuario!.id);
-      default:
-        return getAllPosts;
-    }
-  }, [pagina, usuario]);
+
+  const fetchFunction = useMemo(
+    () => getFetchFunction(pagina, usuario?.id),
+    [pagina, usuario?.id]
+  );
 
   const { data: posts, error, isLoading, refresh } = usePosts(fetchFunction);
 

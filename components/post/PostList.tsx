@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { FlatList, RefreshControl, View } from "react-native";
 import Post from "@/models/Post";
 import PostItem from "./PostItem";
@@ -10,11 +10,7 @@ type PostListProps = {
   isRefreshing: boolean;
 };
 
-export default function PostList({
-  posts,
-  onRefresh,
-  isRefreshing,
-}: PostListProps) {
+const PostList = memo(({ posts, onRefresh, isRefreshing }: PostListProps) => {
   function renderHandler(post: Post) {
     return <PostItem post={post} />;
   }
@@ -43,4 +39,6 @@ export default function PostList({
       }
     />
   );
-}
+});
+
+export default PostList;

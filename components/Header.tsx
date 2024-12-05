@@ -20,7 +20,7 @@ export type Subpaginas = (typeof subPaginas)[number]["key"];
 export default function Header({ router, ...props }: BottomTabHeaderProps) {
   const { deslogar } = useAuth();
   const { setPagina } = useAuth();
-  const [selectedTab, setSelectedTab] = useState<Subpaginas>("paraVoce");
+  const [selectedTab, setSelectedTab] = useState<Subpaginas>("descubra");
 
   const handleTabChange = (tab: Subpaginas) => {
     setSelectedTab(tab);

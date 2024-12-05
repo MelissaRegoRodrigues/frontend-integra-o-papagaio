@@ -1,6 +1,7 @@
 import Usuario from "@/models/Usuario";
 
-const USUARIOS_URL = "https://930c-200-133-1-75.ngrok-free.app/api/usuarios";
+const USUARIOS_URL =
+  "https://b0e1-2804-29b8-524e-908-886a-49e1-9ec7-75f8.ngrok-free.app/api/usuarios";
 
 async function follow(seguidorId: string, alvoId: string) {
   const response = await fetch(

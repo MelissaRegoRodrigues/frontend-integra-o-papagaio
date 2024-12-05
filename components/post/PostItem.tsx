@@ -32,8 +32,6 @@ export default function PostItem({ post, ...props }: PostItemProps) {
     router.navigate(url);
   }
 
-  console.log(usuarioData);
-
   async function seguirHandler() {
     if (!usuario) return;
     const usuarioAtualizado = await usuarioService.follow(
@@ -47,9 +45,10 @@ export default function PostItem({ post, ...props }: PostItemProps) {
 
   async function pararSeguirHandler() {
     if (!usuario) return;
+    console.log(usuario);
 
     const usuarioAtualizado = await usuarioService.unfollow(
-      usuario!.id,
+      usuario.id,
       usuarioData!.id
     );
     setIsSeguindo(false);
@@ -94,6 +93,7 @@ export default function PostItem({ post, ...props }: PostItemProps) {
             </View>
           </View>
         </View>
+        <StyledText weight="bold">{post.titulo}</StyledText>
         <StyledText>{post.conteudo}</StyledText>
       </View>
     </Pressable>

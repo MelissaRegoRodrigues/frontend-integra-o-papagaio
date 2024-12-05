@@ -1,6 +1,7 @@
 import Post, { PostCreation } from "@/models/Post";
 
-const URL = "https://930c-200-133-1-75.ngrok-free.app/api/posts";
+const URL =
+  "https://b0e1-2804-29b8-524e-908-886a-49e1-9ec7-75f8.ngrok-free.app/api/posts";
 
 export async function getAllPosts() {
   const response = await fetch(URL);
@@ -39,6 +40,8 @@ export async function getMeusPosts(usuarioId: string) {
 }
 
 export async function criarPost(novoPost: PostCreation) {
+  console.log(novoPost);
+
   const response = await fetch(URL, {
     headers: {
       "Content-Type": "application/json",
