@@ -1,3 +1,4 @@
+import React from "react";
 import { FlatList } from "react-native";
 import ComentarioItem from "./ComentarioItem";
 import Comentario from "@/models/Comentario";

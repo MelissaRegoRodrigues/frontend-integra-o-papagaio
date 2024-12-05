@@ -19,10 +19,10 @@ import useAuth from "@/hooks/useAuth";
 
 export default function RegisterScreen() {
   const { registrar } = useAuth();
-  const [nome, setnome] = useState<string>("zap");
-  const [email, setEmail] = useState<string>("zap@gmail.com");
-  const [senha, setSenha] = useState<string>("zapzap");
-  const [senhaConfirma, setSenhaConfirma] = useState<string>("zapzap");
+  const [nome, setnome] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [senha, setSenha] = useState<string>("");
+  const [senhaConfirma, setSenhaConfirma] = useState<string>("");
 
   const handleRegister = async () => {
     console.log(senha, email, nome);
