@@ -1,17 +1,19 @@
 import React from "react";
 import { Feather } from "@expo/vector-icons";
 import { PropsWithoutRef } from "react";
-import { Image, StyleSheet, View, ViewProps } from "react-native";
+import { Image, StyleSheet, View, ViewProps, Text } from "react-native";
 
 type AvatarProps = {
   url?: string;
   size?: number;
+  name?: string;
 } & PropsWithoutRef<ViewProps>;
 
 export default function Avatar({
   url,
   size = 56,
   style,
+  name,
   ...props
 }: AvatarProps) {
   return (
@@ -24,6 +26,7 @@ export default function Avatar({
       ) : (
         <Feather name="user" size={size} />
       )}
+      <Text></Text>
     </View>
   );
 }

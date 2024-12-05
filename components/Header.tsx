@@ -7,6 +7,8 @@ import StyledText from "./StyledText";
 import Colors from "@/constants/Colors";
 import useAuth from "@/hooks/useAuth";
 import Avatar from "./Avatar";
+import useUsuario from "@/hooks/useUsuarios";
+import { usuarioService } from "@/api/usuarioService";
 
 const subPaginas = [
   { key: "descubra", title: "Descubra" },
@@ -21,12 +23,14 @@ export default function Header({ router, ...props }: BottomTabHeaderProps) {
   const { deslogar } = useAuth();
   const { setPagina } = useAuth();
   const [selectedTab, setSelectedTab] = useState<Subpaginas>("descubra");
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleTabChange = (tab: Subpaginas) => {
+    if (isLoggingOut) return;
     setSelectedTab(tab);
     setPagina(tab);
   };
-  function deslogarHandler() {
+  function deslogarHandler() { 
     Alert.alert(
       "Tem certeza?",
       "Uma vez deslogado você precisará logar novamente",
@@ -37,7 +41,7 @@ export default function Header({ router, ...props }: BottomTabHeaderProps) {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.iconsContainers}>
-        <Avatar />
+        <Avatar  />
         <Pressable style={styles.logoutButton} onPress={deslogarHandler}>
           <StyledText color="textoBranco" weight="bold">
             Deslogar

@@ -1,7 +1,7 @@
 import Post, { PostCreation } from "@/models/Post";
 
 const URL =
-  "https://b0e1-2804-29b8-524e-908-886a-49e1-9ec7-75f8.ngrok-free.app/api/posts";
+  "https://e346-2804-29b8-524e-908-886a-49e1-9ec7-75f8.ngrok-free.app/api/posts";
 
 export async function getAllPosts() {
   const response = await fetch(URL);
